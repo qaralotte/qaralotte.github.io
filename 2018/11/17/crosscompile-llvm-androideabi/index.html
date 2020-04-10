@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="qaralotte"><title>交叉编译clang/llvm for android armeabi · 诗与猫</title><meta name="description" content="Clang是一个C语言、C++、Objective-C语言的轻量级编译器。源代码发布于BSD协议下。Clang将支持其普通lambda表达式、返回类型的简化处理以及更好的处理constexpr关键字。
+
+编译准备
+电脑最少8G内存空闲
+准备SDK
+
+这里是SDK下载地址PS:这里还有其他的工具,比如"><meta name="keywords" content=""><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div id="stage" class="container"><div class="row"><div id="side-bar" class="col-sm-3 col-xs-12 side-container invisible"><div class="vertical-text site-title"><h3 tabindex="-1" class="site-title-small"><a href="/" class="a-title">蕙兰芫荽，郁郁香芷</a></h3><h1 tabindex="-1" class="site-title-large"><a href="/" class="a-title">诗与猫</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div id="site-nav" class="site-title-links"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="soc"><a href="https://github.com/qaralotte" target="_blank" rel="noopener noreferrer"><i class="fa fa-github">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://www.qaralotte.com" rel="noopener noreferrer">qaralotte</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div id="main-container" class="col-sm-9 col-xs-12 main-container invisible"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>交叉编译clang/llvm for android armeabi</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2018-11-17</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a href="/categories/Code/" title="Code" class="a-tag">Code</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a href="/tags/Linux/" title="Linux" class="a-tag">Linux</a><span>&nbsp;</span><a href="/tags/CrossCompile/" title="CrossCompile" class="a-tag">CrossCompile</a><span>&nbsp;</span><a href="/tags/Shell/" title="Shell" class="a-tag">Shell</a><span>&nbsp;</span></span></p><p class="post-abstract"><blockquote>
+<p>Clang是一个C语言、C++、Objective-C语言的轻量级编译器。源代码发布于BSD协议下。Clang将支持其普通lambda表达式、返回类型的简化处理以及更好的处理constexpr关键字。</p>
+</blockquote>
+</p><h2 id="编译准备"><a href="#编译准备" class="headerlink" title="编译准备"></a>编译准备</h2><ul>
+<li>电脑最少8G内存空闲</li>
+<li>准备SDK</li>
+</ul>
+<p>这里是<a href="https://developer.android.com/studio" target="_blank" rel="noopener">SDK下载地址</a><br>PS:这里还有其他的工具,比如NDK</p>
+<ul>
+<li>准备LLVM源码</li>
+</ul>
+<p>这里是<a href="http://releases.llvm.org/download.html" target="_blank" rel="noopener">LLVM官方地址</a><br>下载最新版本的『LLVM源码』和『Clang源码』<br>这里演示的版本为7.0.0</p>
+<ul>
+<li>准备Python</li>
+</ul>
+<p>因为编译时需要Python2.7，所以请在编译前安装Python2.7</p>
+<pre><code>sudo apt install python2.7
+</code></pre><hr>
+<h2 id="开始编译"><a href="#开始编译" class="headerlink" title="开始编译"></a>开始编译</h2><h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p>解压刚刚下载好的llvm-7.0.0.src.tar.xz,放在一个你喜欢的路径<br>假设我放在$HOME<br><strong>此时应该是$HOME/llvm-7.0.0/</strong></p>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>解压刚刚下载好的sdk<br>我还是放在文档里<br>取名为android-sdk-linux<br>sdk里必须下载ndk-bundle和cmake<br><strong>此时应该是$HOME/android-sdk-linux/</strong></p>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p>解压cfe-7.0.0.src.tar.xz，重命名为clang，并移到llvm源码下的tools文件夹内<br><strong>此时应该是$HOME/llvm-7.0.0/tools/clang/</strong></p>
+<h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><p>在llvm的同一级下新建一个文件夹，取名为build<br><strong>此时应该是$HOME/build/</strong></p>
+<h3 id="5"><a href="#5" class="headerlink" title="5"></a>5</h3><p>在一切都准备好之后，就可以开始写cmake参数了<br>在llvm同一级下创造一个文件，取名为llvm.sh</p>
+<pre><code>chmod +x llvm.sh
+</code></pre><p><strong>使这个文件可以被执行</strong></p>
+<h3 id="6"><a href="#6" class="headerlink" title="6"></a>6</h3><p>打开llvm.sh<br><strong>接下来划重点</strong></p>
+<pre class=" language-bash"><code class="language-bash">/home/android-sdk-linux/cmake/3.6.4111459/bin/cmake \
+  -G <span class="token string">"Ninja"</span> \
+  -Bbuild <span class="token string">"<span class="token variable">$PWD</span>/../llvm-7.0.0"</span> \
+  -DANDROID_PLATFORM<span class="token operator">=</span><span class="token string">"android-23"</span> \
+  -DANDROID_STL<span class="token operator">=</span><span class="token string">"c++_shared"</span> \
+  -DANDROID_CPP_FEATURES<span class="token operator">=</span><span class="token string">"rtti exceptions"</span> \
+  -DANDROID_ARM_MODE<span class="token operator">=</span><span class="token string">"arm"</span> \
+  -DANDROID_NDK<span class="token operator">=</span><span class="token string">"<span class="token variable">$HOME</span>/android-sdk-linux/ndk-bundle"</span> \
+  -DANDROID_TOOLCHAIN<span class="token operator">=</span><span class="token string">"clang"</span> \
+  -DANDROID_NATIVE_API_LEVEL<span class="token operator">=</span>23 \
+  -DANDROID_ALLOW_UNDEFINED_SYMBOLS<span class="token operator">=</span>TRUE \
+  -DANDROID_ARM_NEON<span class="token operator">=</span>TRUE \
+  -DANDROID_DISABLE_FORMAT_STRING_CHECKS<span class="token operator">=</span>FALSE \
+  -DANDROID_PIE<span class="token operator">=</span>ON \
+  -DANDROID_ABI<span class="token operator">=</span><span class="token string">"arm64-v8a"</span> \
+  -DCMAKE_SYSTEM_NAME<span class="token operator">=</span><span class="token string">"Android"</span> \
+  -DCMAKE_BUILD_TYPE<span class="token operator">=</span><span class="token string">"Release"</span> \
+  -DCMAKE_TOOLCHAIN_FILE<span class="token operator">=</span><span class="token string">"<span class="token variable">$HOME</span>/android-sdk-linux/ndk-bundle/build/cmake/android.toolchain.cmake"</span> \
+  -DCMAKE_MAKE_PROGRAM<span class="token operator">=</span><span class="token string">"<span class="token variable">$HOME</span>/android-sdk-linux/cmake/3.6.4111459/bin/ninja"</span> \
+  -DCMAKE_C_FLAGS<span class="token operator">=</span><span class="token string">"-std=c11"</span> \
+  -DCMAKE_CXX_FLAGS<span class="token operator">=</span><span class="token string">"-std=c++14 -D_LIBCPP_STD_VER=14"</span>
+</code></pre>
+<p><strong>必须运行sdk里的cmake，因为google对其修改了源码</strong><br>位置在$SDK/cmake/3.6.4111459/bin/cmake</p>
+<ul>
+<li><p><strong>指定用Ninja编译器 使用Make工具编译LLVM是非常耗时的 往往需要三四个小时 但是使用google开源的Ninja编译LLVM只需要10到20分钟</strong></p>
+</li>
+<li><p><strong>Build 后面写的是需要编译的源码位置</strong></p>
+</li>
+<li><p><strong>ANDROID_PLATFORM 指定目标Android平台的名称</strong></p>
+</li>
+<li><p><strong>ANDROID_STL 指定应使用的STL CMake 参数如下</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">none</td>
+<td style="text-align:center">No C++ Support</td>
+</tr>
+<tr>
+<td style="text-align:center">system</td>
+<td style="text-align:center">Minimal C++ without STL</td>
+</tr>
+<tr>
+<td style="text-align:center">gabi++_static</td>
+<td style="text-align:center">GAbi++ Static</td>
+</tr>
+<tr>
+<td style="text-align:center">gabi++_shared</td>
+<td style="text-align:center">GAbi++ Shared</td>
+</tr>
+<tr>
+<td style="text-align:center">gnustl_static</td>
+<td style="text-align:center">GNU libstdc++ Static</td>
+</tr>
+<tr>
+<td style="text-align:center">gnustl_shared</td>
+<td style="text-align:center">GNU libstdc++ Shared</td>
+</tr>
+<tr>
+<td style="text-align:center">c++_static</td>
+<td style="text-align:center">LLVM libc++ Static</td>
+</tr>
+<tr>
+<td style="text-align:center">c++_shared</td>
+<td style="text-align:center">LLVM libc++ Shared</td>
+</tr>
+<tr>
+<td style="text-align:center">stlport_static</td>
+<td style="text-align:center">STLport Static</td>
+</tr>
+<tr>
+<td style="text-align:center">stlport_shared</td>
+<td style="text-align:center">STLport Shared</td>
+</tr>
+</tbody>
+</table>
+<p><strong>官方默认的是c++_static</strong></p>
+<ul>
+<li><strong>ANDROID_CPP_FEATURES 指定CMake在编译本机库时需要使用的某些C++特性 参数只有两个</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">rtti</td>
+<td style="text-align:center">表明代码使用RTTI</td>
+</tr>
+<tr>
+<td style="text-align:center">exceptions</td>
+<td style="text-align:center">表明代码使用C++异常</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>ANDROID_ARM_MODE 指定是否以arm或thumb模式生成ARM目标二进制文件</strong></p>
+</li>
+<li><p><strong>ANDROID_ARM_NEON 指定CMake是否应构建具有NEON支持的本机库 API23以上填TRUE，以下填FALSE</strong></p>
+</li>
+<li><p><strong>ANDROID_NDK 指定NDK安装的绝对路径 这里SDK已经自带了NDK了 填sdk文件夹里的ndk-bundle就好了</strong></p>
+</li>
+<li><p><strong>ANDROID_NATIVE_API_LEVEL 指定CMake编译的Android API级别</strong></p>
+</li>
+<li><p><strong>ANDROID_ALLOW_UNDEFINED_SYMBOLS 指定如果CMake在构建本机库时遇到未定义的引用 是否抛出未定义的符号错误 禁用为TRUE</strong></p>
+</li>
+<li><p><strong>ANDROID_DISABLE_FORMAT_STRING_CHECKS 指定是否使用格式字符串保护编译源代码 启用后 如果在printf-style函数中使用非常量格式字符串 则编译器将引发错误 所以这里填FALSE</strong></p>
+</li>
+<li><p><strong>ANDROID_PIE 指定是否使用与位置无关的可执行文件 API16以上需要ON 否则OFF</strong></p>
+</li>
+<li><p><strong>ANDROID_ABI 指定CMake编译的目标ABI 参数如下</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">armeabi</td>
+</tr>
+<tr>
+<td style="text-align:center">armeabi-v7a</td>
+</tr>
+<tr>
+<td style="text-align:center">armeabi-v7a with NEON</td>
+</tr>
+<tr>
+<td style="text-align:center">arm64-v8a</td>
+</tr>
+<tr>
+<td style="text-align:center">x86</td>
+</tr>
+<tr>
+<td style="text-align:center">x86_64</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>CMAKE_SYSTEM_NAME 指定CMake编译的名称 填Android就好了</strong></p>
+</li>
+<li><p><strong>CMAKE_BUILD_TYPE 编译的类型 Release和Debug 选一个喜欢的</strong></p>
+</li>
+<li><p><strong>CMAKE_TOOLCHAIN_FILE 指定CMake用于Android交叉编译的文件的路径</strong></p>
+</li>
+<li><p><strong>CMAKE_MAKE_PROGRAM 用于启动本机构建系统的工具 因为我们使用Ninja编译器 所以必须要指定ninja位置</strong><br>位置在$SDK/cmake/3.6.4111459/bin/ninja</p>
+</li>
+<li><p><strong>CMAKE_C_FLAGS和CMAKE_CXX_FLAGS作用我就不说了 表明一个用c11一个用c++14</strong></p>
+</li>
+</ul>
+<h3 id="7"><a href="#7" class="headerlink" title="7"></a>7</h3><p>进入之前新建的build文件夹</p>
+<pre><code>cd $HOME/build
+</code></pre><p>在build文件夹里执行llvm.sh</p>
+<pre><code>./../llvm.sh
+</code></pre><p>等出现Build files have been written to: xxxxxxx就是成功了</p>
+<h3 id="8"><a href="#8" class="headerlink" title="8"></a>8</h3><pre><code>$HOME/android-sdk-linux/cmake/3.6.4111459/bin/ninja -jn
+</code></pre><p>开始编译 n写的是你的cpu核数</p>
+<h3 id="9"><a href="#9" class="headerlink" title="9"></a>9</h3><pre><code>$HOME/android-sdk-linux/cmake/3.6.4111459/bin/ninja install -j2
+</code></pre><p>这个时候clang就差不多编译完了<br>最后生成的文件很大 请务必strip一下</p>
+<pre><code>$HOME/android-sdk-linux/cmake/3.6.4111459/bin/strip clang-7
+</code></pre><p><strong>如有错误 请联系<a href="mailto:qaralotte@gmail.com" target="_blank" rel="noopener">qaralotte@gmail.com</a><br>敬请雅正:)</strong></p>
+<p></p></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></span><span class="soc"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></span><span class="soc"><a href="http://twitter.com/home?status=https://www.qaralotte.com/2018/11/17/crosscompile-llvm-androideabi/%20诗与猫%20交叉编译clang/llvm for android armeabi" class="fa fa-twitter"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2019/01/13/mi6-install-magisk/" title="[MI6] 如何正确的安装Magisk"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: [MI6] 如何正确的安装Magisk</a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://www.qaralotte.com" rel="noopener noreferrer">qaralotte</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><canvas style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" class="fireworks"></canvas><script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script><script type="text/javascript" src="/js/fireworks.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/kesyoban.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body></html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>诗与猫</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://www.qaralotte.com/"/>
+  <updated>2020-04-10T10:37:25.627Z</updated>
+  <id>https://www.qaralotte.com/</id>
+  
+  <author>
+    <name>qaralotte</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>你用Chrome竟然不装TamperMonkey</title>
+    <link href="https://www.qaralotte.com/2020/02/28/why-your-chrome-doesnt-have-tampermonkey/"/>
+    <id>https://www.qaralotte.com/2020/02/28/why-your-chrome-doesnt-have-tampermonkey/</id>
+    <published>2020-02-28T11:42:19.000Z</published>
+    <updated>2020-04-10T10:37:25.627Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://qara-blog.oss-cn-hangzhou.aliyuncs.com/why-your-chrome-doesnt-have-tampermonkey/icon.png&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Chrome" scheme="https://www.qaralotte.com/categories/Chrome/"/>
+    
+    
+      <category term="ctx" scheme="https://www.qaralotte.com/tags/ctx/"/>
+    
+      <category term="eclass" scheme="https://www.qaralotte.com/tags/eclass/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>地獄通信</title>
+    <link href="https://www.qaralotte.com/2019/12/30/djigokutsushin/"/>
+    <id>https://www.qaralotte.com/2019/12/30/djigokutsushin/</id>
+    <published>2019-12-30T14:01:06.000Z</published>
+    <updated>2020-04-10T10:37:25.613Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+&lt;html ondragstart=&quot;return false&quot; oncontextmenu=&quot;return false&quot; onselectstart=&quot;return false&quot;&gt;
+  &lt;head&gt;&lt;meta name=&quot;generator&quot; content=&quot;Hexo
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Custom" scheme="https://www.qaralotte.com/categories/Custom/"/>
+    
+    
+      <category term="Hell" scheme="https://www.qaralotte.com/tags/Hell/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[危]论如何用TWRP刷机</title>
+    <link href="https://www.qaralotte.com/2019/12/28/use-twrp-to-flash-new-system/"/>
+    <id>https://www.qaralotte.com/2019/12/28/use-twrp-to-flash-new-system/</id>
+    <published>2019-12-28T13:02:09.000Z</published>
+    <updated>2020-04-10T10:37:25.617Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;前几天，米6已经可以更新MIUI11，然而刷了Magisk的我已经收不到更新，更别说OTA更新了，因为之前刷Magisk的时候需要刷入TWRP的Rec，所以我现在想更新系统只能靠刷了&lt;/p&gt;
+&lt;p&gt;虽说刷机有风险&lt;br&gt;但是&lt;strong&gt;MIUI11香啊&lt;/strong&gt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Flash" scheme="https://www.qaralotte.com/categories/Flash/"/>
+    
+    
+      <category term="Android" scheme="https://www.qaralotte.com/tags/Android/"/>
+    
+      <category term="TWRP" scheme="https://www.qaralotte.com/tags/TWRP/"/>
+    
+      <category term="MIUI" scheme="https://www.qaralotte.com/tags/MIUI/"/>
+    
+      <category term="Card Flashing" scheme="https://www.qaralotte.com/tags/Card-Flashing/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>C++实现大数处理</title>
+    <link href="https://www.qaralotte.com/2019/12/01/cpp-biginteger/"/>
+    <id>https://www.qaralotte.com/2019/12/01/cpp-biginteger/</id>
+    <published>2019-12-01T15:20:20.000Z</published>
+    <updated>2020-04-10T10:37:25.631Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;本算法标准基于ISO/IEC 14882:2011&lt;/p&gt;
+&lt;h2 id=&quot;原理&quot;&gt;&lt;a href=&quot;#原理&quot; class=&quot;headerlink&quot; title=&quot;原理&quot;&gt;&lt;/a&gt;原理&lt;/h2&gt;&lt;p&gt;例如 这里有两个字符串&lt;br&gt;std::string
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Code" scheme="https://www.qaralotte.com/categories/Code/"/>
+    
+    
+      <category term="CPP" scheme="https://www.qaralotte.com/tags/CPP/"/>
+    
+      <category term="BigInteger" scheme="https://www.qaralotte.com/tags/BigInteger/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>用C++写一份以毫秒为单位的延时函数</title>
+    <link href="https://www.qaralotte.com/2019/10/02/cpp-delay-function/"/>
+    <id>https://www.qaralotte.com/2019/10/02/cpp-delay-function/</id>
+    <published>2019-10-01T16:34:48.000Z</published>
+    <updated>2020-04-10T10:37:25.622Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;目前，C++标准库并没有关于延时的函数，不同的操作系统有不同的头文件用来实现延时，比如Linux的unistd.h里的sleep和Windows里的windows.h里的Sleep，然而今天我发现，usleep和_sleep全被打上了[deprecate]属性，也就是说不建
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Code" scheme="https://www.qaralotte.com/categories/Code/"/>
+    
+    
+      <category term="CPP" scheme="https://www.qaralotte.com/tags/CPP/"/>
+    
+      <category term="Time" scheme="https://www.qaralotte.com/tags/Time/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[MI6] 如何正确的安装Magisk</title>
+    <link href="https://www.qaralotte.com/2019/01/13/mi6-install-magisk/"/>
+    <id>https://www.qaralotte.com/2019/01/13/mi6-install-magisk/</id>
+    <published>2019-01-13T08:38:18.000Z</published>
+    <updated>2020-04-10T10:37:25.608Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://qara-blog.oss-cn-hangzhou.aliyuncs.com/mi6-install-magisk/magisk_logo.png&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Flash" scheme="https://www.qaralotte.com/categories/Flash/"/>
+    
+    
+      <category term="Android" scheme="https://www.qaralotte.com/tags/Android/"/>
+    
+      <category term="MIUI" scheme="https://www.qaralotte.com/tags/MIUI/"/>
+    
+      <category term="Magisk" scheme="https://www.qaralotte.com/tags/Magisk/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>交叉编译clang/llvm for android armeabi</title>
+    <link href="https://www.qaralotte.com/2018/11/17/crosscompile-llvm-androideabi/"/>
+    <id>https://www.qaralotte.com/2018/11/17/crosscompile-llvm-androideabi/</id>
+    <published>2018-11-17T14:18:24.000Z</published>
+    <updated>2020-04-10T10:37:25.603Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;blockquote&gt;
+&lt;p&gt;Clang是一个C语言、C++、Objective-C语言的轻量级编译器。源代码发布于BSD协议下。Clang将支持其普通lambda表达式、返回类型的简化处理以及更好的处理constexpr关键字。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Code" scheme="https://www.qaralotte.com/categories/Code/"/>
+    
+    
+      <category term="Linux" scheme="https://www.qaralotte.com/tags/Linux/"/>
+    
+      <category term="CrossCompile" scheme="https://www.qaralotte.com/tags/CrossCompile/"/>
+    
+      <category term="Shell" scheme="https://www.qaralotte.com/tags/Shell/"/>
+    
+  </entry>
+  
+</feed>

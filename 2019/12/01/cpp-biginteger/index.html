@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="qaralotte"><title>C++实现大数处理 · 诗与猫</title><meta name="description" content="本算法标准基于ISO/IEC 14882:2011
+原理例如 这里有两个字符串std::string s1(“123456789123456”)std::string s2(“123456789”)
+加首先，先比较两个字符串的长度，长度小的字符串在前面填充 ‘0’，直到两者长度相同为止所以 s2 变"><meta name="keywords" content=""><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><div id="stage" class="container"><div class="row"><div id="side-bar" class="col-sm-3 col-xs-12 side-container invisible"><div class="vertical-text site-title"><h3 tabindex="-1" class="site-title-small"><a href="/" class="a-title">蕙兰芫荽，郁郁香芷</a></h3><h1 tabindex="-1" class="site-title-large"><a href="/" class="a-title">诗与猫</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div id="site-nav" class="site-title-links"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="soc"><a href="https://github.com/qaralotte" target="_blank" rel="noopener noreferrer"><i class="fa fa-github">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://www.qaralotte.com" rel="noopener noreferrer">qaralotte</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div id="main-container" class="col-sm-9 col-xs-12 main-container invisible"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><p class="post-title"><a>C++实现大数处理</a></p><p class="post-meta"><span class="date meta-item">发布于&nbsp;2019-12-01</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a href="/categories/Code/" title="Code" class="a-tag">Code</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a href="/tags/CPP/" title="CPP" class="a-tag">CPP</a><span>&nbsp;</span><a href="/tags/BigInteger/" title="BigInteger" class="a-tag">BigInteger</a><span>&nbsp;</span></span></p><p class="post-abstract"></p><p>本算法标准基于ISO/IEC 14882:2011</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>例如 这里有两个字符串<br>std::string s1(“123456789123456”)<br>std::string s2(“123456789”)</p>
+<h3 id="加"><a href="#加" class="headerlink" title="加"></a>加</h3><p>首先，先比较两个字符串的长度，长度小的字符串在前面填充 ‘0’，直到两者长度相同为止<br>所以 s2 变成了 “000000123456789”<br>然后，遍历两个字符串，将遍历的每个字符转换成数字相加，此时可以定义个bool变量用来记录相加是否大于10，如果true则下一次运算+1<br>如果循环结束这个bool变量依然是true那么就往前面再加个’1’<br>在此之前可以判断两者的第一个字符是否是’-‘，然后再考虑交给减运算或者是最后在前面加个’-‘</p>
+<h3 id="减"><a href="#减" class="headerlink" title="减"></a>减</h3><p>首先，先比较两个字符串的长度，长度小的字符串在前面填充 ‘0’，直到两者长度相同为止<br>所以 s2 变成了 “000000123456789”<br>减的判断还得多一个两者大小，遍历两个字符串，每一位比较大小，如果一直是相等那么可以判定这两个大数是相等的，否则就返回大或小，根据这个值，最后可得知：  </p>
+<ul>
+<li>s1 &gt; s2 =&gt; s1 - s2  </li>
+<li>s1 = s2 =&gt; 0  </li>
+<li>s1 &lt; s2 =&gt; ‘-‘ + (s2 - s1)  </li>
+</ul>
+<p>然后，遍历两个字符串，将遍历的每个字符转换成数字相减，此时可以定义个bool变量用来记录相减是否小于0，如果true则下一次运算-1<br>在此之前可以判断两者的第一个字符是否是’-‘，然后再考虑交给加运算或者是最后在前面加个’-‘</p>
+<h3 id="乘"><a href="#乘" class="headerlink" title="乘"></a>乘</h3><p>根据小学的十位数乘法<br>例如：11 x 11<br><img src="https://qara-blog.oss-cn-hangzhou.aliyuncs.com/cpp-biginteger/multiply.png" alt="乘法"></p>
+<p>遍历s1和s2，不过这次是  </p>
+<p>s1[s1.size() - 1] <em> s2[s1.size() - 1]<br>s1[s1.size() - 2] </em> s2[s1.size() - 1]<br>s1[s1.size() - 3] * s2[s1.size() - 1]  </p>
+<p>s1[s1.size() - 1] <em> s2[s1.size() - 2]<br>s1[s1.size() - 2] </em> s2[s1.size() - 2]<br>s1[s1.size() - 3] <em> s2[s1.size() - 2]<br>…<br>s1[2] </em> s2[0]<br>s1[1] <em> s2[0]<br>s1[0] </em> s2[0]  </p>
+<p>除了对 s2[s1.size() - 1] 相乘不需要加’0’以外，其他都要在后面补’0’<br>最后两者相加交给加运算即可</p>
+<h3 id="除"><a href="#除" class="headerlink" title="除"></a>除</h3><p>其实就是减法</p>
+<p><img src="https://qara-blog.oss-cn-hangzhou.aliyuncs.com/cpp-biginteger/devide.png" alt="除法"></p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre class=" language-CPP"><code class="language-CPP">class BigInteger {
+private:
+    std::string num{"0"};
+public:
+    BigInteger() = default;
+    explicit BigInteger(std::string num) : num(std::move(num)) {};
+    std::string toString() const {
+        return this -> num;
+    }
+    BigInteger operator+(const BigInteger &another) {
+        std::string result, _num = num, _ano_num = another.num;
+        bool negative_num = _num[0] == '-';
+        if (_ano_num[0] == '-') {
+            return BigInteger(*this - BigInteger(_ano_num.substr(1, _ano_num.size())));
+        }
+        if (negative_num) {
+            _num = _num.substr(1, _num.size());
+        }
+        std::string __num = _num;
+        std::string __ano_num = _ano_num;
+        unsigned long size = (__num.size() >= __ano_num.size() ? __num.size() : __ano_num.size()) + 1;
+        for (unsigned long i = 0; i < size; ++i) {
+            if ((__num.size() <= __ano_num.size()="" ?="" __num.size()="" :="" __ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" int="" les{};="" if="" (negative_num)="" (*this=""> another) {
+                les = -1;
+            } else if (*this == another) {
+                les = 0;
+            } else {
+                les = 1;
+            }
+        }
+        bool enter = false;
+        for (std::string::reverse_iterator rev_iter_num = _num.rbegin(), rev_iter_ano_num = _ano_num.rbegin(); rev_iter_num != _num.rend() && rev_iter_ano_num != _ano_num.rend(); ++rev_iter_num, ++rev_iter_ano_num) {
+            if (!negative_num) {
+                int value{};
+                value = (*(rev_iter_num) - '0') + (*(rev_iter_ano_num) - '0');
+                if (enter) {
+                    ++value;
+                    enter = false;
+                }
+                if (value >= 10) {
+                    result.insert(0, std::to_string(value - 10));
+                    enter = true;
+                } else {
+                    result.insert(0, std::to_string(value));
+                }
+            } else {
+                if (les == -1) {
+                    BigInteger _value = BigInteger(_num) - BigInteger(_ano_num);
+                    result = "-" + _value.toString();
+                } else if (les == 0) {
+                    result = "0";
+                } else {
+                    BigInteger _result = BigInteger(_ano_num) - BigInteger(_num);
+                    result = _result.toString();
+                }
+            }
+        }
+        if (enter) result.insert(0, "1");
+        while (result[0] == '0' && result.size() > 1) {
+            result = result.substr(1, result.size());
+        }
+        return BigInteger(result);
+    }
+    BigInteger operator-(const BigInteger &another) {
+        std::string result, _num = num, _ano_num = another.num;
+        bool negative_num = _num[0] == '-';
+        if (_ano_num[0] == '-') {
+            return *this + (BigInteger(_ano_num.substr(1, _ano_num.size())));
+        }
+        if (negative_num) {
+            _num = _num.substr(1, _num.size());
+        }
+        std::string __num = _num;
+        std::string __ano_num = _ano_num;
+        unsigned long size = (__num.size() >= __ano_num.size() ? __num.size() : __ano_num.size()) + 1;
+        for (unsigned long i = 0; i < size; ++i) {
+            if ((__num.size() <= __ano_num.size()="" ?="" __num.size()="" :="" __ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" int="" les{};="" if="" (*this=""> another) {
+            les = -1;
+        } else if (*this == another) {
+            les = 0;
+        } else {
+            les = 1;
+        }
+        bool back = false;
+        for (std::string::reverse_iterator rev_iter_num = _num.rbegin(), rev_iter_ano_num = _ano_num.rbegin(); rev_iter_num != _num.rend() && rev_iter_ano_num != _ano_num.rend(); ++rev_iter_num, ++rev_iter_ano_num) {
+            if (!negative_num) {
+                if (les == -1) {
+                    int value{};
+                    value = (*(rev_iter_num) - '0') - (*(rev_iter_ano_num) - '0');
+                    if (back) {
+                        --value;
+                        back = false;
+                    }
+                    if (value < 0) {
+                        result.insert(0, std::to_string(value + 10));
+                        back = true;
+                    } else {
+                        result.insert(0, std::to_string(value));
+                    }
+                } else if (les == 0) {
+                    result = "0";
+                } else {
+                    BigInteger value = BigInteger(_ano_num) - BigInteger(_num);
+                    result = "-" + value.toString();
+                }
+            } else {
+                BigInteger _value = BigInteger(_num) + BigInteger(_ano_num);
+                result = "-" + _value.toString();
+            }
+        }
+        while (result[0] == '0' && result.size() > 1) {
+            result = result.substr(1, result.size());
+        }
+        return BigInteger(result);
+    }
+    BigInteger operator*(const BigInteger &another) {
+        std::string result, _num = num, _ano_num = another.num;
+        bool negative_num = _num[0] == '-';
+        bool negative_ano_num = _ano_num[0] == '-';
+        bool negative = false;
+        if (negative_num) {
+            _num = _num.substr(1, _num.size());
+        }
+        if (negative_ano_num) {
+            _ano_num = _ano_num.substr(1, _ano_num.size());
+        }
+        if ((negative_num && !negative_ano_num) || (!negative_num && negative_ano_num)) {
+            negative = true;
+        }
+        _num.insert(0, "0");
+        _ano_num.insert(0, "0");
+        std::string _m{};
+        for (std::string::reverse_iterator rev_ano_iter_num = _ano_num.rbegin(); rev_ano_iter_num != _ano_num.rend(); ++rev_ano_iter_num, _m += "0") {
+            int enter{};
+            std::string _m_value{};
+            for (std::string::reverse_iterator rev_iter_num = _num.rbegin(); rev_iter_num != _num.rend(); ++rev_iter_num) {
+                int _value = ((*(rev_ano_iter_num) - '0') * (*(rev_iter_num) - '0') + enter);
+                if (_value >= 10) {
+                    _m_value.insert(0, std::to_string(_value % 10));
+                    enter = _value / 10 % 10;
+                } else {
+                    _m_value.insert(0, std::to_string(_value));
+                    enter = 0;
+                }
+            }
+            if (!enter) {
+                _m_value.insert(0, std::to_string(enter));
+            }
+            _m_value += _m;
+            BigInteger _result = BigInteger(_m_value) + BigInteger(result);
+            result = _result.toString();
+        }
+        if (negative) {
+            result = '-' + result;
+        }
+        return BigInteger(result);
+    }
+    BigInteger operator/(const BigInteger &another) {
+        std::string result, _num = num, _ano_num = another.num;
+        bool negative_num = _num[0] == '-';
+        bool negative_ano_num = _ano_num[0] == '-';
+        bool negative = false;
+        if (negative_num) {
+            _num = _num.substr(1, _num.size());
+        }
+        if (negative_ano_num) {
+            _ano_num = _ano_num.substr(1, _ano_num.size());
+        }
+        if ((negative_num && !negative_ano_num) || (!negative_num && negative_ano_num)) {
+            negative = true;
+        }
+        int les{};
+        if (*this > another) {
+            les = -1;
+        } else if (*this == another) {
+            les = 0;
+        } else {
+            les = 1;
+        }
+        if (les == -1) {
+            long _size{(long)(_num.size() - _ano_num.size())};
+            for (unsigned long i = 0; i < _size; ++i) {
+                _ano_num += "0";
+            }
+            BigInteger _count{"0"};
+            while (_size >= 0) {
+                bool __big = false;
+                unsigned long __size = (_num.size() >= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+                for (unsigned long i = 0; i < __size; ++i) {
+                    if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" if="" (biginteger(_num)="">= BigInteger(_ano_num)) {
+                    __big = true;
+                } else {
+                    __big = false;
+                    --_size;
+                    _ano_num = _ano_num.substr(0, _ano_num.size() - 1);
+                }
+                if (__big) {
+                    _num = (BigInteger(_num) - BigInteger(_ano_num)).toString();
+                    BigInteger _zero{"1"};
+                    for (unsigned long __tmp = 0; __tmp < _size; ++__tmp) {
+                        _zero = BigInteger(_zero) * BigInteger("10");
+                    }
+                    _count = BigInteger(_count) + _zero;
+                }
+            }
+            result = _count.toString();
+        } else if (les == 0) {
+            result = "1";
+        } else {
+            return BigInteger("0");
+        }
+        if (negative) result.insert(0, "-");
+        return BigInteger(result);
+    }
+    bool operator<(const biginteger="" &another)="" {="" bool="" _b="false;" std::string="" _num="num," _ano_num="another.num;" unsigned="" long="" _size="(_num.size()">= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+        for (unsigned long i = 0; i < _size; ++i) {
+            if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" for="" (std::string::iterator="" iter_num="_num.begin()," iter_ano_num="_ano_num.begin();" !="_num.end()" &&="" ++iter_num,="" ++iter_ano_num)="" if="" ((*(iter_num)="" -="" '0')=""> (*(iter_ano_num) - '0')) {
+                _b = false;
+                break;
+            } else if ((*(iter_num) - '0') == (*(iter_ano_num) - '0')) {
+                _b = false;
+            } else {
+                _b = true;
+                break;
+            }
+        }
+        return _b;
+    }
+    bool operator<=(const biginteger="" &another)="" {="" bool="" _b="false;" std::string="" _num="num," _ano_num="another.num;" unsigned="" long="" _size="(_num.size()">= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+        for (unsigned long i = 0; i < _size; ++i) {
+            if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" for="" (std::string::iterator="" iter_num="_num.begin()," iter_ano_num="_ano_num.begin();" !="_num.end()" &&="" ++iter_num,="" ++iter_ano_num)="" if="" ((*(iter_num)="" -="" '0')=""> (*(iter_ano_num) - '0')) {
+                _b = false;
+                break;
+            } else if ((*(iter_num) - '0') == (*(iter_ano_num) - '0')) {
+                _b = true;
+            } else {
+                _b = true;
+                break;
+            }
+        }
+        return _b;
+    }
+    bool operator==(const BigInteger &another) {
+        bool _b = false;
+        std::string _num = num, _ano_num = another.num;
+        unsigned long _size = (_num.size() >= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+        for (unsigned long i = 0; i < _size; ++i) {
+            if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" for="" (std::string::iterator="" iter_num="_num.begin()," iter_ano_num="_ano_num.begin();" !="_num.end()" &&="" ++iter_num,="" ++iter_ano_num)="" if="" ((*(iter_num)="" -="" '0')=""> (*(iter_ano_num) - '0')) {
+                _b = false;
+                break;
+            } else if ((*(iter_num) - '0') == (*(iter_ano_num) - '0')) {
+                _b = true;
+            } else {
+                _b = false;
+                break;
+            }
+        }
+        return _b;
+    }
+    bool operator>=(const BigInteger &another) {
+        bool _b = false;
+        std::string _num = num, _ano_num = another.num;
+        unsigned long _size = (_num.size() >= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+        for (unsigned long i = 0; i < _size; ++i) {
+            if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" for="" (std::string::iterator="" iter_num="_num.begin()," iter_ano_num="_ano_num.begin();" !="_num.end()" &&="" ++iter_num,="" ++iter_ano_num)="" if="" ((*(iter_num)="" -="" '0')=""> (*(iter_ano_num) - '0')) {
+                _b = true;
+                break;
+            } else if ((*(iter_num) - '0') == (*(iter_ano_num) - '0')) {
+                _b = true;
+            } else {
+                _b = false;
+                break;
+            }
+        }
+        return _b;
+    }
+    bool operator>(const BigInteger &another) {
+        bool _b = false;
+        std::string _num = num, _ano_num = another.num;
+        unsigned long _size = (_num.size() >= _ano_num.size() ? _num.size() : _ano_num.size()) + 1;
+        for (unsigned long i = 0; i < _size; ++i) {
+            if ((_num.size() <= _ano_num.size()="" ?="" _num.size()="" :="" _ano_num.size())="" <="" i)="" {="" _num.insert(0,="" "0")="" _ano_num.insert(0,="" "0");="" }="" for="" (std::string::iterator="" iter_num="_num.begin()," iter_ano_num="_ano_num.begin();" !="_num.end()" &&="" ++iter_num,="" ++iter_ano_num)="" if="" ((*(iter_num)="" -="" '0')=""> (*(iter_ano_num) - '0')) {
+                _b = true;
+                break;
+            } else if ((*(iter_num) - '0') == (*(iter_ano_num) - '0')) {
+                _b = false;
+            } else {
+                _b = false;
+                break;
+            }
+        }
+        return _b;
+    }
+};
+</=></=></=></=></=(const></=></(const></=></=></=></code></pre>
+<p>如何使用</p>
+<pre class=" language-CPP"><code class="language-CPP">BigInteger bi1("123456789");  
+BigInteger bi2("123456789123456");  
+std::cout << (b1 + b2).toString() << std::endl;
+</code></pre>
+<p><strong>如有错误 请联系<a href="mailto:qaralotte@gmail.com" target="_blank" rel="noopener">qaralotte@gmail.com</a><br>敬请雅正:)</strong></p>
+<p></p></div><div class="share"><span>分享到</span>&nbsp;<span class="soc"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></span><span class="soc"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></span><span class="soc"><a href="http://twitter.com/home?status=https://www.qaralotte.com/2019/12/01/cpp-biginteger/%20诗与猫%20C++实现大数处理" class="fa fa-twitter"></a></span></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/2019/12/28/use-twrp-to-flash-new-system/" title="[危]论如何用TWRP刷机"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: [危]论如何用TWRP刷机</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/2019/10/02/cpp-delay-function/" title="用C++写一份以毫秒为单位的延时函数">下一篇: 用C++写一份以毫秒为单位的延时函数&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://www.qaralotte.com" rel="noopener noreferrer">qaralotte</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.js"></script><canvas style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" class="fireworks"></canvas><script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script><script type="text/javascript" src="/js/fireworks.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/kesyoban.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"log":false});</script></body></html>
